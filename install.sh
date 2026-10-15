@@ -12,6 +12,7 @@
 #   ./install.sh docker          # optional: install Docker only (nothing stowed)
 #   ./install.sh python          # optional: install Python via uv (nothing stowed)
 #   ./install.sh node            # optional: install Node via nvm (nothing stowed)
+#   ./install.sh gh              # optional: install GitHub CLI (nothing stowed)
 #   ./install.sh tmux            # optional: install tmux (nothing stowed)
 set -euo pipefail
 
@@ -72,6 +73,10 @@ for pkg in "${PACKAGES[@]}"; do
       ;;
     fonts)
       "$DOTFILES_DIR/scripts/install-fonts.sh"
+      continue
+      ;;
+    gh)
+      "$DOTFILES_DIR/scripts/install-gh.sh"
       continue
       ;;
   esac

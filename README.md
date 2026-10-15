@@ -37,7 +37,8 @@ dotfiles/
 │   ├── install-python.sh    # python via uv, standalone, opt-in only
 │   ├── install-node.sh      # node via nvm (+pnpm), standalone, opt-in only
 │   ├── install-tmux.sh      # tmux (+ ~/.tmux.conf package)
-│   └── install-fonts.sh     # JetBrainsMono + FiraCode Nerd Fonts (required)
+│   ├── install-fonts.sh     # JetBrainsMono + FiraCode Nerd Fonts (required)
+│   └── install-gh.sh        # GitHub CLI, standalone, opt-in only
 ├── nvim/                    # Stow package
 │   └── .config/
 │       └── nvim/            # -> ~/.config/nvim
@@ -97,8 +98,8 @@ cd ~/dotfiles
 
 `install.sh` installs Stow if missing, runs each package's setup script
 (`scripts/install-*.sh`), then runs `stow -t "$HOME" <packages>`
-(default: `nvim zsh rust tmux fonts`; `docker`/`python`/`node` are opt-in
-only and stow nothing). `tmux` installs tmux if missing
+(default: `nvim zsh rust tmux fonts`; `docker`/`python`/`node`/`gh` are
+opt-in only and stow nothing). `tmux` installs tmux if missing
 (`scripts/install-tmux.sh`) and stows `~/.tmux.conf`. To stow a single package manually:
 
 ```sh

@@ -30,6 +30,22 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 
+# Homebrew (macOS): install.sh relies on it when present, so ensure it here.
+if [ "$(uname -s)" = "Darwin" ] && ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew not found, installing (non-interactive)..."
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+fi
+
+if ! command -v brew >/dev/null 2>&1 && [ "$(uname -s)" = "Darwin" ]; then
+  echo "error: Homebrew installation failed; see https://brew.sh." >&2
+  exit 1
+fi
+
 if [ -d "$DOTFILES_DIR/.git" ]; then
   echo "updating $DOTFILES_DIR"
   git -C "$DOTFILES_DIR" pull --ff-only

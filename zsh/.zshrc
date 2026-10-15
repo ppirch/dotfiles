@@ -2,9 +2,14 @@
 # Edit the copy in the repo, then re-stow: `stow -R -t "$HOME" zsh`.
 # Machine-specific overrides go in ~/.zshrc.local (sourced below, never committed).
 
+# Powerlevel10k instant prompt (must stay at the very top of this file).
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # --- oh-my-zsh ---------------------------------------------------------------
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="robbyrussell"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Uncomment to update oh-my-zsh automatically without prompting:
 # zstyle ':omz:update' mode auto
@@ -62,3 +67,6 @@ fi
 
 # --- local overrides (not committed) ------------------------------------------
 [ -f "$HOME/.zshrc.local" ] && . "$HOME/.zshrc.local"
+
+# Powerlevel10k config (tracked in this repo; regenerate with `p10k configure`).
+[ -f "$HOME/.p10k.zsh" ] && . "$HOME/.p10k.zsh"

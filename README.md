@@ -19,9 +19,9 @@ curl -fsSL https://raw.githubusercontent.com/ppirch/dotfiles/main/bootstrap.sh |
 ```
 
 On macOS, install the Xcode Command Line Tools first if prompted:
-`xcode-select --install`. [Homebrew](https://brew.sh/) is used for
-packages when present; `install.sh` otherwise falls back to
-apt/dnf/pacman.
+`xcode-select --install`. [Homebrew](https://brew.sh/) is installed
+automatically by `bootstrap.sh` when missing, and used for packages;
+`install.sh` otherwise falls back to apt/dnf/pacman.
 
 Each top-level directory is a Stow package that mirrors `$HOME`:
 
@@ -52,6 +52,8 @@ dotfiles/
 │   └── .config/
 │       └── ghostty/
 │           └── config       # -> ~/.config/ghostty/config
+├── git/                     # Stow package
+│   └── .gitconfig           # -> ~/.gitconfig (identity + aliases)
 └── README.md
 ```
 
@@ -98,7 +100,7 @@ cd ~/dotfiles
 
 `install.sh` installs Stow if missing, runs each package's setup script
 (`scripts/install-*.sh`), then runs `stow -t "$HOME" <packages>`
-(default: `nvim zsh rust tmux fonts`; `docker`/`python`/`node`/`gh` are
+(default: `nvim zsh rust tmux fonts git`; `docker`/`python`/`node`/`gh` are
 opt-in only and stow nothing). `tmux` installs tmux if missing
 (`scripts/install-tmux.sh`) and stows `~/.tmux.conf`. To stow a single package manually:
 
@@ -122,6 +124,14 @@ The `zsh` package symlinks `~/.zshrc`. When you run `./install.sh zsh`
    (plain `git clone`, so your stowed `.zshrc` is never overwritten).
 3. Clones the extra plugins `zsh-autosuggestions` and
    `zsh-syntax-highlighting` into `~/.oh-my-zsh/custom/plugins/`.
+4. Clones the `powerlevel10k` theme into
+   `~/.oh-my-zsh/custom/themes/` and selects it (`ZSH_THEME`).
+
+On a new machine (or now, after this change), run `p10k configure`
+once in a terminal and answer the wizard — it writes `~/.p10k.zsh`
+(requires a Nerd Font, installed by `./install.sh fonts`). The file
+is tracked in `zsh/.p10k.zsh`, so re-running the wizard to tweak the
+prompt is a normal config change: commit and push it.
 
 The `.zshrc` enables the `git`, `nvm`, `node`, `npm`, `python`, `uv`,
 `vscode` and `docker` oh-my-zsh plugins (+ `zsh-autosuggestions` and

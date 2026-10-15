@@ -60,4 +60,11 @@ for plugin in zsh-autosuggestions zsh-syntax-highlighting; do
   fi
 done
 
+if [ ! -d "$ZSH_CUSTOM/themes/powerlevel10k" ]; then
+  echo "cloning powerlevel10k"
+  git clone --depth=1 "https://github.com/romkatv/powerlevel10k.git" "$ZSH_CUSTOM/themes/powerlevel10k"
+else
+  echo "powerlevel10k already present"
+fi
+
 echo "done. (To make zsh your login shell: chsh -s \"\$(command -v zsh)\")"

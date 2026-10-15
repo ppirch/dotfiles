@@ -1,0 +1,23 @@
+# ~/.gitconfig — managed by dotfiles (git/ package, GNU Stow).
+# Machine/tool-specific settings go in ~/.gitconfig.local (included below).
+
+[user]
+	name = ppirch
+	email = pakin.pirch@gmail.com
+
+[init]
+	defaultBranch = main
+
+[pull]
+	# Fast-forward only: never create surprise merge commits on pull.
+	ff = only
+
+[alias]
+	st = status --short --branch
+	co = checkout
+	br = branch
+	ci = commit
+	lg = log --oneline --graph -15
+
+[include]
+	path = ~/.gitconfig.local

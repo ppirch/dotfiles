@@ -1,14 +1,10 @@
+# Neovim-generated files (inside the stowed config)
 tags
 test.sh
-.luarc.json
-nvim
+nvim/.config/nvim/spell/
+nvim/.config/nvim/.luarc.json
 
-spell/
-
-# In your personal fork, you likely want to comment this, since it's recommended to track
-# nvim-pack-lock.json in version control - see :help vim.pack-lockfile
-# For the official `nvim-lua/kickstart.nvim` git repository, we leave it ignored to avoid unneeded
-# merge conflicts.
-nvim-pack-lock.json
+# Track nvim-pack-lock.json in version control for reproducible
+# plugin installs (see `:help vim.pack-lockfile`).
 
 .DS_Store

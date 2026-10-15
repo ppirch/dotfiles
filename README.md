@@ -31,7 +31,11 @@ dotfiles/
 ├── install.sh               # package installer (stow + per-package setup)
 ├── scripts/
 │   ├── install-omz.sh       # zsh + oh-my-zsh (+plugins), standalone
-│   └── install-nvim.sh      # neovim + ripgrep/fd/tree-sitter, standalone
+│   ├── install-nvim.sh      # neovim + ripgrep/fd/tree-sitter, standalone
+│   ├── install-rust.sh      # rust toolchain (rustup + rustfmt + rust-analyzer), standalone
+│   ├── install-docker.sh    # docker, standalone, opt-in only
+│   ├── install-python.sh    # python via uv, standalone, opt-in only
+│   └── install-node.sh      # node via nvm (+pnpm), standalone, opt-in only
 ├── nvim/                    # Stow package
 │   └── .config/
 │       └── nvim/            # -> ~/.config/nvim
@@ -61,6 +65,14 @@ when missing, except where noted:
 - `zsh` + [oh-my-zsh](https://ohmyz.sh/) (via `scripts/install-omz.sh`)
 - Neovim (latest `stable`) + `ripgrep`, `fd`, `tree-sitter-cli`
   (via `scripts/install-nvim.sh`)
+- Rust toolchain (`rustc`/`cargo` via rustup, + `rustfmt`/`rust-analyzer`
+  components) for the Neovim Rust setup (via `scripts/install-rust.sh`,
+  included in the default `./install.sh` run)
+- Docker (optional, opt-in only: `./install.sh docker` or
+  `./scripts/install-docker.sh`)
+- Python via [uv](https://docs.astral.sh/uv/) (optional, opt-in only:
+  `./install.sh python` or `./scripts/install-python.sh`; installs a
+  uv-managed Python without touching system Pythons)
 - A C compiler + `make` for building `telescope-fzf-native.nvim`
   (not auto-installed — on macOS: `xcode-select --install`)
 - A [Nerd Font](https://www.nerdfonts.com/) (optional, set `vim.g.have_nerd_font = true` in `nvim/.config/nvim/init.lua`)
@@ -75,7 +87,7 @@ cd ~/dotfiles
 
 `install.sh` installs Stow if missing, runs each package's setup script
 (`scripts/install-*.sh`), then runs `stow -t "$HOME" <packages>`
-(default: `nvim zsh`). To stow a single package manually:
+(default: `nvim zsh rust`; `docker`/`python` are opt-in only and stow nothing). To stow a single package manually:
 
 ```sh
 cd ~/dotfiles
@@ -98,7 +110,10 @@ The `zsh` package symlinks `~/.zshrc`. When you run `./install.sh zsh`
 3. Clones the extra plugins `zsh-autosuggestions` and
    `zsh-syntax-highlighting` into `~/.oh-my-zsh/custom/plugins/`.
 
-The `.zshrc` enables the `git` and `nvm` oh-my-zsh plugins, picks up
+The `.zshrc` enables the `git`, `nvm`, `node`, `npm`, `python`, `uv`,
+`vscode` and `docker` oh-my-zsh plugins (+ `zsh-autosuggestions` and
+`zsh-syntax-highlighting`); `pnpm` has no oh-my-zsh plugin and is
+installed globally under the nvm-managed Node instead. It picks up
 Homebrew (`/opt/homebrew` on Apple Silicon, `/usr/local` on Intel Macs),
 sets `nvim` as `$EDITOR` when available, and restores your tool paths
 (`~/.local/bin`, cargo, nvm, opencode). Machine-specific overrides go in
@@ -137,6 +152,29 @@ Useful commands: `:checkhealth`, `:lua vim.pack.update(nil, { offline = true })`
 
 Search your config files with `<leader>sn`, Neovim help with `<leader>sh`.
 Run `:Tutor` if you are new to Vim motions.
+
+## Rust
+
+Rust support is built on [rustaceanvim](https://github.com/mrcjkb/rustaceanvim)
+(pinned to `^9` via `vim.pack`):
+
+- `rust-analyzer` comes from the rustup toolchain (`./install.sh rust`),
+  deliberately **not** Mason's copy, to avoid toolchain version mismatches.
+- `rust`/`toml` Tree-sitter parsers install on first use, `rustfmt`
+  runs via conform.nvim, Clippy is the default `check` command.
+- No debug adapter configured. To debug Rust later, run
+  `:MasonInstall codelldb` (auto-detected by rustaceanvim).
+
+Verify with a scratch project:
+
+```sh
+cargo new /tmp/rust-nvim-test
+nvim /tmp/rust-nvim-test/src/main.rs
+```
+
+`:checkhealth rustaceanvim` should be happy and exactly one
+`rust-analyzer` client attached. Useful commands: `:RustLsp codeAction`,
+`:RustLsp explainError`, `<leader>f` to format.
 
 ## Layout conventions
 

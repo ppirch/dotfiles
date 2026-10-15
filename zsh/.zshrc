@@ -12,8 +12,14 @@ ZSH_THEME="robbyrussell"
 plugins=(
   git
   nvm
+  node
+  npm
+  python
+  uv
+  vscode
   zsh-autosuggestions
   zsh-syntax-highlighting
+  docker
 )
 
 if [ -d "$ZSH" ]; then
@@ -38,9 +44,8 @@ elif [ -x /usr/local/bin/brew ]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
-# --- PATH / tool environments (migrated from bash setup) ----------------------
+# --- PATH / tool environments ----------------------
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
-[ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
 case ":$PATH:" in
   *":$HOME/.local/bin:"*) ;;
   *) export PATH="$HOME/.local/bin:$PATH" ;;

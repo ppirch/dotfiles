@@ -741,8 +741,12 @@ do
     -- Some languages (like rust) have entire language plugins that can be useful:
     --    https://github.com/mrcjkb/rustaceanvim
     --
-    -- But for many setups, the LSP (`rust_analyzer`) will work just fine
-    -- rust_analyzer = {},
+    -- NOTE: no `rust_analyzer` entry here on purpose. Rust is handled by
+    -- rustaceanvim (see the RUST section below), which configures its own
+    -- LSP client. Setting it up via nvim-lspconfig as well would attach
+    -- two clients and cause conflicts. rustaceanvim uses the
+    -- version-matched `rust-analyzer` from the rustup toolchain
+    -- (`scripts/install-rust.sh`), not Mason's copy.
 
     stylua = {}, -- Used to format Lua code
 
@@ -815,6 +819,34 @@ do
 end
 
 -- ============================================================
+-- SECTION 6.5: RUST (rustaceanvim)
+-- rustaceanvim configures its own rust-analyzer client (filetype
+-- plugin, no setup() call needed) plus :RustLsp commands.
+-- rust-analyzer itself comes from the rustup toolchain
+-- (scripts/install-rust.sh), deliberately NOT Mason's copy,
+-- to avoid toolchain version mismatches. No debug adapter is
+-- configured; add one later if needed (e.g. codelldb via Mason,
+-- which rustaceanvim auto-detects).
+-- ============================================================
+do
+  -- NOTE: no `lazy = false`/ft spec needed: this plugin lazy-loads by design.
+  vim.pack.add { { src = gh 'mrcjkb/rustaceanvim', version = vim.version.range '^9' } }
+
+  vim.g.rustaceanvim = {
+    server = {
+      default_settings = {
+        ['rust-analyzer'] = {
+          check = { command = 'clippy' },
+        },
+      },
+    },
+    -- No `dap` section: no debug adapter configured. To debug Rust
+    -- later, install one (e.g. `:MasonInstall codelldb`, which
+    -- rustaceanvim auto-detects) and it will just work.
+  }
+end
+
+-- ============================================================
 -- SECTION 7: FORMATTING
 -- conform.nvim setup and keymap
 -- ============================================================
@@ -840,7 +872,7 @@ do
     },
     -- You can also specify external formatters in here.
     formatters_by_ft = {
-      -- rust = { 'rustfmt' },
+      rust = { 'rustfmt' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --
@@ -948,7 +980,7 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'rust', 'toml', 'vim', 'vimdoc' }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer

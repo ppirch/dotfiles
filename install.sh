@@ -2,11 +2,14 @@
 # Install/symlink dotfiles packages with GNU Stow.
 #
 # Usage:
-#   ./install.sh [package ...]   # default: nvim zsh
+#   ./install.sh [package ...]   # default: nvim zsh rust
 #
 # Examples:
 #   ./install.sh                 # stow the default packages
 #   ./install.sh nvim            # stow just nvim (-> ~/.config/nvim)
+#   ./install.sh docker          # optional: install Docker only (nothing stowed)
+#   ./install.sh python          # optional: install Python via uv (nothing stowed)
+#   ./install.sh node            # optional: install Node via nvm (nothing stowed)
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -14,7 +17,7 @@ TARGET="$HOME"
 PACKAGES=("$@")
 
 if [ "${#PACKAGES[@]}" -eq 0 ]; then
-  PACKAGES=(nvim zsh)
+  PACKAGES=(nvim zsh rust)
 fi
 
 install_system_package() {
@@ -46,6 +49,26 @@ if ! command -v stow >/dev/null 2>&1; then
 fi
 
 for pkg in "${PACKAGES[@]}"; do
+  # Tool-only installers (no stow package directory).
+  case "$pkg" in
+    rust)
+      "$DOTFILES_DIR/scripts/install-rust.sh"
+      continue
+      ;;
+    docker)
+      "$DOTFILES_DIR/scripts/install-docker.sh"
+      continue
+      ;;
+    python)
+      "$DOTFILES_DIR/scripts/install-python.sh"
+      continue
+      ;;
+    node)
+      "$DOTFILES_DIR/scripts/install-node.sh"
+      continue
+      ;;
+  esac
+
   if [ ! -d "$DOTFILES_DIR/$pkg" ]; then
     echo "error: package '$pkg' not found in $DOTFILES_DIR" >&2
     exit 1

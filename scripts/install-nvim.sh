@@ -45,7 +45,9 @@ else
   elif command -v pacman >/dev/null 2>&1; then
     install_packages neovim ripgrep fd tree-sitter-cli unzip
   elif command -v brew >/dev/null 2>&1; then
-    install_packages neovim ripgrep fd tree-sitter
+    # Homebrew's `tree-sitter` formula is the library only; the CLI is `tree-sitter-cli`.
+    brew_missing=("${missing[@]/tree-sitter/tree-sitter-cli}")
+    install_packages "${brew_missing[@]}"
   else
     install_packages neovim ripgrep fd tree-sitter
   fi

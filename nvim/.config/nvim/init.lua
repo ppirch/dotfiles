@@ -99,7 +99,9 @@ do
   vim.g.maplocalleader = ' '
 
   -- Set to true if you have a Nerd Font installed and selected in the terminal
-  vim.g.have_nerd_font = false
+  -- This dotfiles setup installs JetBrainsMono Nerd Font by default
+  -- (scripts/install-fonts.sh), so this stays on.
+  vim.g.have_nerd_font = true
 
   -- [[ Setting options ]]
   --  See `:help vim.o`
@@ -735,7 +737,7 @@ do
   local servers = {
     -- clangd = {},
     -- gopls = {},
-    -- pyright = {},
+    pyright = {},
     -- tsc = {},
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
@@ -808,6 +810,7 @@ do
   local ensure_installed = vim.tbl_keys(servers or {})
   vim.list_extend(ensure_installed, {
     -- You can add other tools here that you want Mason to install
+    'ruff', -- Python formatter/linter (used by conform.nvim below)
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -873,8 +876,9 @@ do
     -- You can also specify external formatters in here.
     formatters_by_ft = {
       rust = { 'rustfmt' },
+      -- Ruff formats and organizes imports (installed via Mason, see above)
+      python = { 'ruff_format', 'ruff_organize_imports' },
       -- Conform can also run multiple formatters sequentially
-      -- python = { "isort", "black" },
       --
       -- You can use 'stop_after_first' to run the first available formatter from the list
       -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -980,7 +984,7 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'rust', 'toml', 'vim', 'vimdoc' }
+  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'rust', 'toml', 'vim', 'vimdoc' }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer

@@ -8,14 +8,14 @@ Works on macOS and Linux.
 One-liner (clones to `~/dotfiles`, installs everything):
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/ppirch/dotfiles/master/bootstrap.sh | sh
+curl -fsSL https://raw.githubusercontent.com/ppirch/dotfiles/main/bootstrap.sh | sh
 ```
 
 With options — stow only `zsh`, or override the clone location:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/ppirch/dotfiles/master/bootstrap.sh | sh -s -- zsh
-curl -fsSL https://raw.githubusercontent.com/ppirch/dotfiles/master/bootstrap.sh | DOTFILES_DIR=~/.dotfiles sh
+curl -fsSL https://raw.githubusercontent.com/ppirch/dotfiles/main/bootstrap.sh | sh -s -- zsh
+curl -fsSL https://raw.githubusercontent.com/ppirch/dotfiles/main/bootstrap.sh | DOTFILES_DIR=~/.dotfiles sh
 ```
 
 On macOS, install the Xcode Command Line Tools first if prompted:
@@ -35,7 +35,9 @@ dotfiles/
 │   ├── install-rust.sh      # rust toolchain (rustup + rustfmt + rust-analyzer), standalone
 │   ├── install-docker.sh    # docker, standalone, opt-in only
 │   ├── install-python.sh    # python via uv, standalone, opt-in only
-│   └── install-node.sh      # node via nvm (+pnpm), standalone, opt-in only
+│   ├── install-node.sh      # node via nvm (+pnpm), standalone, opt-in only
+│   ├── install-tmux.sh      # tmux (+ ~/.tmux.conf package)
+│   └── install-fonts.sh     # JetBrainsMono + FiraCode Nerd Fonts (required)
 ├── nvim/                    # Stow package
 │   └── .config/
 │       └── nvim/            # -> ~/.config/nvim
@@ -43,6 +45,12 @@ dotfiles/
 │           └── lua/
 ├── zsh/                     # Stow package
 │   └── .zshrc               # -> ~/.zshrc (oh-my-zsh based)
+├── tmux/                    # Stow package
+│   └── .tmux.conf           # -> ~/.tmux.conf
+├── ghostty/                 # Stow package (opt-in: ./install.sh ghostty)
+│   └── .config/
+│       └── ghostty/
+│           └── config       # -> ~/.config/ghostty/config
 └── README.md
 ```
 
@@ -75,7 +83,9 @@ when missing, except where noted:
   uv-managed Python without touching system Pythons)
 - A C compiler + `make` for building `telescope-fzf-native.nvim`
   (not auto-installed — on macOS: `xcode-select --install`)
-- A [Nerd Font](https://www.nerdfonts.com/) (optional, set `vim.g.have_nerd_font = true` in `nvim/.config/nvim/init.lua`)
+- JetBrainsMono + FiraCode [Nerd Fonts](https://www.nerdfonts.com/) (installed by
+  default via `scripts/install-fonts.sh`; select one in your terminal.
+  `vim.g.have_nerd_font` is `true` in `nvim/.config/nvim/init.lua`)
 
 ## Install
 
@@ -87,7 +97,9 @@ cd ~/dotfiles
 
 `install.sh` installs Stow if missing, runs each package's setup script
 (`scripts/install-*.sh`), then runs `stow -t "$HOME" <packages>`
-(default: `nvim zsh rust`; `docker`/`python` are opt-in only and stow nothing). To stow a single package manually:
+(default: `nvim zsh rust tmux fonts`; `docker`/`python`/`node` are opt-in
+only and stow nothing). `tmux` installs tmux if missing
+(`scripts/install-tmux.sh`) and stows `~/.tmux.conf`. To stow a single package manually:
 
 ```sh
 cd ~/dotfiles
@@ -175,6 +187,15 @@ nvim /tmp/rust-nvim-test/src/main.rs
 `:checkhealth rustaceanvim` should be happy and exactly one
 `rust-analyzer` client attached. Useful commands: `:RustLsp codeAction`,
 `:RustLsp explainError`, `<leader>f` to format.
+
+## Python
+
+Python support is `pyright` (LSP, via Mason) + `ruff` (format +
+import organization via conform.nvim, also via Mason) + the `python`
+Tree-sitter parser. The interpreter itself comes from
+`./install.sh python` (uv-managed). In projects, `uv venv` /
+`uv sync` as usual — pyright picks up the local `.venv`
+automatically.
 
 ## Layout conventions
 

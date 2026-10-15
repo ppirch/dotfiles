@@ -2,7 +2,7 @@
 # Universal dotfiles entrypoint (macOS + Linux, POSIX sh compatible).
 #
 # One-liner install:
-#   curl -fsSL https://raw.githubusercontent.com/ppirch/dotfiles/master/bootstrap.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/ppirch/dotfiles/main/bootstrap.sh | sh
 #
 # With package arguments (forwarded to install.sh):
 #   curl -fsSL .../bootstrap.sh | sh -s -- nvim zsh
@@ -10,12 +10,12 @@
 # Environment overrides:
 #   DOTFILES_DIR   where to clone (default: $HOME/dotfiles)
 #   DOTFILES_REPO  git remote (default: https://github.com/ppirch/dotfiles.git)
-#   DOTFILES_REF   branch to clone (default: master)
+#   DOTFILES_REF   branch to clone (default: main)
 set -eu
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
 DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/ppirch/dotfiles.git}"
-DOTFILES_REF="${DOTFILES_REF:-master}"
+DOTFILES_REF="${DOTFILES_REF:-main}"
 
 if [ "$(uname -s)" = "Darwin" ]; then
   if ! xcode-select -p >/dev/null 2>&1; then

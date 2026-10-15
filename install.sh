@@ -2,14 +2,17 @@
 # Install/symlink dotfiles packages with GNU Stow.
 #
 # Usage:
-#   ./install.sh [package ...]   # default: nvim zsh rust
+#   ./install.sh [package ...]   # default: nvim zsh rust tmux fonts
 #
 # Examples:
 #   ./install.sh                 # stow the default packages
 #   ./install.sh nvim            # stow just nvim (-> ~/.config/nvim)
+#   ./install.sh tmux            # install tmux + stow ~/.tmux.conf
+#   ./install.sh ghostty          # optional: install Ghostty + stow its config
 #   ./install.sh docker          # optional: install Docker only (nothing stowed)
 #   ./install.sh python          # optional: install Python via uv (nothing stowed)
 #   ./install.sh node            # optional: install Node via nvm (nothing stowed)
+#   ./install.sh tmux            # optional: install tmux (nothing stowed)
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -17,7 +20,7 @@ TARGET="$HOME"
 PACKAGES=("$@")
 
 if [ "${#PACKAGES[@]}" -eq 0 ]; then
-  PACKAGES=(nvim zsh rust)
+  PACKAGES=(nvim zsh rust tmux fonts)
 fi
 
 install_system_package() {
@@ -67,6 +70,10 @@ for pkg in "${PACKAGES[@]}"; do
       "$DOTFILES_DIR/scripts/install-node.sh"
       continue
       ;;
+    fonts)
+      "$DOTFILES_DIR/scripts/install-fonts.sh"
+      continue
+      ;;
   esac
 
   if [ ! -d "$DOTFILES_DIR/$pkg" ]; then
@@ -80,6 +87,14 @@ for pkg in "${PACKAGES[@]}"; do
 
   if [ "$pkg" = "nvim" ]; then
     "$DOTFILES_DIR/scripts/install-nvim.sh"
+  fi
+
+  if [ "$pkg" = "tmux" ]; then
+    "$DOTFILES_DIR/scripts/install-tmux.sh"
+  fi
+
+  if [ "$pkg" = "ghostty" ]; then
+    "$DOTFILES_DIR/scripts/install-ghostty.sh"
   fi
 
   echo "stowing $pkg -> $TARGET"

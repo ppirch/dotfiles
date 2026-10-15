@@ -1,0 +1,4 @@
+# ~/.config/ghostty/config — managed by dotfiles (ghostty/ package, GNU Stow).
+# See `ghostty +list-fonts` and https://ghostty.org/docs/config
+
+font-family = "JetBrainsMono Nerd Font"

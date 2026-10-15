@@ -28,6 +28,7 @@ else
 fi
 
 # TPM (tmux plugin manager), required by ~/.tmux.conf (`run .../tpm/tpm`).
+fresh_tpm=0
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
   if ! command -v git >/dev/null 2>&1; then
     echo "error: git is required to install tpm." >&2
@@ -35,9 +36,20 @@ if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
   fi
   echo "cloning tpm -> $HOME/.tmux/plugins/tpm"
   git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-  echo "note: inside tmux, press '<prefix> I' once to install the configured plugins."
+  fresh_tpm=1
 else
   echo "tpm already present at $HOME/.tmux/plugins/tpm"
+fi
+
+# Install the `@plugin`s from ~/.tmux.conf right away (headless-safe).
+# Without this the theme and status modules stay inactive until someone
+# presses `<prefix> I` inside tmux.
+if [ "$fresh_tpm" = "1" ] && [ -f "$HOME/.tmux.conf" ]; then
+  echo "installing tmux plugins..."
+  "$HOME/.tmux/plugins/tpm/bin/install_plugins"
+elif [ ! -f "$HOME/.tmux.conf" ]; then
+  echo "note: ~/.tmux.conf not stowed yet — run ./install.sh tmux, then"
+  echo "press '<prefix> I' inside tmux to install the configured plugins."
 fi
 
 echo "done. ($(tmux -V))"

@@ -34,11 +34,13 @@ dotfiles/
 │   ├── install-nvim.sh      # neovim + ripgrep/fd/tree-sitter, standalone
 │   ├── install-rust.sh      # rust toolchain (rustup + rustfmt + rust-analyzer), standalone
 │   ├── install-docker.sh    # docker, standalone, opt-in only
-│   ├── install-python.sh    # python via uv, standalone, opt-in only
-│   ├── install-node.sh      # node via nvm (+pnpm), standalone, opt-in only
+│   ├── install-python.sh    # python via uv, standalone
+│   ├── install-node.sh      # node via nvm (+pnpm), standalone
 │   ├── install-tmux.sh      # tmux (+ ~/.tmux.conf package)
 │   ├── install-fonts.sh     # JetBrainsMono + FiraCode Nerd Fonts (required)
-│   └── install-gh.sh        # GitHub CLI, standalone, opt-in only
+│   ├── install-ghostty.sh   # ghostty + theme, standalone, opt-in only
+│   ├── install-gh.sh        # GitHub CLI, standalone, opt-in only
+│   └── install-bat.sh       # bat (better cat), standalone
 ├── nvim/                    # Stow package
 │   └── .config/
 │       └── nvim/            # -> ~/.config/nvim
@@ -83,17 +85,21 @@ when missing, except where noted:
   included in the default `./install.sh` run)
 - Docker (optional, opt-in only: `./install.sh docker` or
   `./scripts/install-docker.sh`)
-- Python via [uv](https://docs.astral.sh/uv/) (optional, opt-in only:
-  `./install.sh python` or `./scripts/install-python.sh`; installs a
-  uv-managed Python without touching system Pythons)
-- Node.js via [nvm](https://github.com/nvm-sh/nvm) + `pnpm` (optional,
-  opt-in only: `./install.sh node` or `./scripts/install-node.sh`)
+- Python via [uv](https://docs.astral.sh/uv/) (via `./install.sh python`
+  or `./scripts/install-python.sh`, included in the default run;
+  installs a uv-managed Python without touching system Pythons)
+- Node.js via [nvm](https://github.com/nvm-sh/nvm) + `pnpm`
+  (via `./install.sh node` or `./scripts/install-node.sh`,
+  included in the default run)
 - `tmux` + [TPM](https://github.com/tmux-plugins/tpm) plugins
   (via `scripts/install-tmux.sh`, included in the default run)
 - [Ghostty](https://ghostty.org/) + Catppuccin theme file (optional,
   opt-in only: `./install.sh ghostty` or `./scripts/install-ghostty.sh`)
 - [GitHub CLI](https://cli.github.com/) (optional, opt-in only:
   `./install.sh gh` or `./scripts/install-gh.sh`)
+- [bat](https://github.com/sharkdp/bat) (better `cat` with syntax
+  highlighting, via `./install.sh bat` or `./scripts/install-bat.sh`,
+  included in the default run)
 - A C compiler + `make` for building `telescope-fzf-native.nvim`
   (not auto-installed — on macOS: `xcode-select --install`)
 - JetBrainsMono + FiraCode [Nerd Fonts](https://www.nerdfonts.com/) (installed by
@@ -110,7 +116,7 @@ cd ~/dotfiles
 
 `install.sh` installs Stow if missing, runs each package's setup script
 (`scripts/install-*.sh`), then runs `stow -t "$HOME" <packages>`
-(default: `nvim zsh rust tmux fonts git sqlfluff`; `docker`/`python`/`node`/`gh`/`ghostty` are
+(default: `nvim zsh rust tmux fonts git sqlfluff bat python node`; `docker`/`gh`/`ghostty` are
 opt-in only and stow nothing). `tmux` installs tmux if missing
 (`scripts/install-tmux.sh`) and stows `~/.tmux.conf`. To stow a single package manually:
 

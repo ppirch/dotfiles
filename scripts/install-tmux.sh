@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Standalone tmux installer. Safe to re-run: no-op when tmux is present.
 #
-# This is opt-in (no tmux config package in this repo yet), so
-# `install.sh` only runs it when asked:
+# Included in the default `install.sh` run (which also stows ~/.tmux.conf),
+# also works standalone:
 #   ./install.sh tmux
 #
 # Usage:

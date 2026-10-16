@@ -761,6 +761,7 @@ do
     pyright = {},
     ts_ls = {}, -- TypeScript ( powers Next.js / React editing )
     tailwindcss = {}, -- Tailwind CSS (completions/hover in class attributes)
+    sqls = {}, -- SQL (schema-aware completions need DB connections in config; see README)
     biome = {}, -- Biome LSP: lint for JS/TS/React (format via conform below)
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
@@ -836,6 +837,7 @@ do
     'ruff', -- Python formatter/linter (used by conform.nvim below)
     'markdownlint', -- Markdown linter (used by lua/kickstart/plugins/lint.lua when enabled)
     'biome', -- JS/TS/React formatter+linter (used by conform.nvim + LSP below)
+    'sql-formatter', -- SQL formatter (used by conform.nvim below)
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -910,6 +912,7 @@ do
       typescriptreact = { 'biome', 'biome-organize-imports' },
       json = { 'biome' },
       css = { 'biome' },
+      sql = { 'sql_formatter' },
       -- Conform can also run multiple formatters sequentially
       --
       -- You can use 'stop_after_first' to run the first available formatter from the list
@@ -1016,7 +1019,7 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'css', 'diff', 'html', 'javascript', 'jsdoc', 'json', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'rust', 'toml', 'tsx', 'typescript', 'vim', 'vimdoc' }
+  local parsers = { 'bash', 'c', 'css', 'diff', 'html', 'javascript', 'jsdoc', 'json', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'rust', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vimdoc' }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer

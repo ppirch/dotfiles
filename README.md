@@ -217,6 +217,14 @@ parsers. Per project, run `biome init` (or let defaults apply);
 `tailwindcss` LSP adds completions/hover inside class attributes.
 No ESLint integration — say the word if you use it.
 
+## SQL
+
+`sqls` (LSP, via Mason) + `sql-formatter` (via conform.nvim) + the `sql`
+Tree-sitter parser. Note: `sqls` only gives schema-aware completions
+once database connections are configured (see
+`sqls` docs for the connections setting); without that you still get
+syntax-level behavior plus formatting via `<leader>f`.
+
 ## Layout conventions
 
 - One Stow package per tool (`nvim/`, later `bash/`, `git/`, ...).

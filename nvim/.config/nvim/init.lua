@@ -434,6 +434,14 @@ do
   -- Load the colorscheme here.
   vim.cmd.colorscheme 'catppuccin-macchiato'
 
+  -- Blend the cmdline row (the "blank" line above tmux's bar) with the
+  -- statusline. Re-applied on colorscheme change so it survives :colorscheme.
+  vim.api.nvim_create_autocmd('ColorScheme', {
+    group = vim.api.nvim_create_augroup('kickstart-msgarea', { clear = true }),
+    callback = function() vim.api.nvim_set_hl(0, 'MsgArea', { link = 'StatusLine' }) end,
+  })
+  vim.api.nvim_set_hl(0, 'MsgArea', { link = 'StatusLine' })
+
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup { signs = false }

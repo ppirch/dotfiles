@@ -629,6 +629,23 @@ do
 
   -- Shortcut for searching your Neovim configuration files
   vim.keymap.set('n', '<leader>sn', function() builtin.find_files { cwd = vim.fn.stdpath 'config', follow = true } end, { desc = '[S]earch [N]eovim files' })
+
+  -- [[ Harpoon: mark navigation ]]
+  -- Requires plenary.nvim (already installed above for Telescope).
+  vim.pack.add { { src = gh 'theprimeagen/harpoon', version = 'harpoon2' } }
+  local harpoon = require 'harpoon'
+  harpoon:setup()
+
+  -- NOTE: <C-h/j/k/l> stay as window navigation (see Basic Keymaps), so
+  -- Harpoon uses <leader> keys instead of Primeagen's defaults.
+  vim.keymap.set('n', '<leader>a', function() harpoon:list():add() end, { desc = 'Harpoon: [A]dd file' })
+  vim.keymap.set('n', '<C-e>', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = 'Harpoon: toggle menu' })
+  vim.keymap.set('n', '<leader>1', function() harpoon:list():select(1) end, { desc = 'Harpoon: file 1' })
+  vim.keymap.set('n', '<leader>2', function() harpoon:list():select(2) end, { desc = 'Harpoon: file 2' })
+  vim.keymap.set('n', '<leader>3', function() harpoon:list():select(3) end, { desc = 'Harpoon: file 3' })
+  vim.keymap.set('n', '<leader>4', function() harpoon:list():select(4) end, { desc = 'Harpoon: file 4' })
+  vim.keymap.set('n', '[h', function() harpoon:list():prev() end, { desc = 'Harpoon: previous file' })
+  vim.keymap.set('n', ']h', function() harpoon:list():next() end, { desc = 'Harpoon: next file' })
 end
 
 -- ============================================================

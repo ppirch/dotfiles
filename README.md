@@ -208,6 +208,15 @@ Tree-sitter parser. The interpreter itself comes from
 `uv sync` as usual — pyright picks up the local `.venv`
 automatically.
 
+## Next.js / TypeScript
+
+`ts_ls` + `biome` LSPs (both via Mason) + Biome format/imports via
+conform.nvim + `javascript`/`typescript`/`tsx`/`json`/`css` Tree-sitter
+parsers. Per project, run `biome init` (or let defaults apply);
+`biome.json`/`package.json`/`.git` also act as the LSP workspace root.
+`tailwindcss` LSP adds completions/hover inside class attributes.
+No ESLint integration — say the word if you use it.
+
 ## Layout conventions
 
 - One Stow package per tool (`nvim/`, later `bash/`, `git/`, ...).

@@ -730,7 +730,9 @@ do
     -- clangd = {},
     -- gopls = {},
     pyright = {},
-    -- tsc = {},
+    ts_ls = {}, -- TypeScript ( powers Next.js / React editing )
+    tailwindcss = {}, -- Tailwind CSS (completions/hover in class attributes)
+    biome = {}, -- Biome LSP: lint for JS/TS/React (format via conform below)
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
     --    https://github.com/mrcjkb/rustaceanvim
@@ -804,6 +806,7 @@ do
     -- You can add other tools here that you want Mason to install
     'ruff', -- Python formatter/linter (used by conform.nvim below)
     'markdownlint', -- Markdown linter (used by lua/kickstart/plugins/lint.lua when enabled)
+    'biome', -- JS/TS/React formatter+linter (used by conform.nvim + LSP below)
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -871,6 +874,13 @@ do
       rust = { 'rustfmt' },
       -- Ruff formats and organizes imports (installed via Mason, see above)
       python = { 'ruff_format', 'ruff_organize_imports' },
+      -- Biome formats and organizes imports (installed via Mason, see above)
+      javascript = { 'biome', 'biome-organize-imports' },
+      typescript = { 'biome', 'biome-organize-imports' },
+      javascriptreact = { 'biome', 'biome-organize-imports' },
+      typescriptreact = { 'biome', 'biome-organize-imports' },
+      json = { 'biome' },
+      css = { 'biome' },
       -- Conform can also run multiple formatters sequentially
       --
       -- You can use 'stop_after_first' to run the first available formatter from the list
@@ -977,7 +987,7 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'rust', 'toml', 'vim', 'vimdoc' }
+  local parsers = { 'bash', 'c', 'css', 'diff', 'html', 'javascript', 'jsdoc', 'json', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'rust', 'toml', 'tsx', 'typescript', 'vim', 'vimdoc' }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer

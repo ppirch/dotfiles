@@ -13,7 +13,6 @@
 #   ./install.sh python          # optional: install Python via uv (nothing stowed)
 #   ./install.sh node            # optional: install Node via nvm (nothing stowed)
 #   ./install.sh gh              # optional: install GitHub CLI (nothing stowed)
-#   ./install.sh tmux            # optional: install tmux (nothing stowed)
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

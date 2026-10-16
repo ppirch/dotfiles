@@ -854,9 +854,10 @@ end
 -- plugin, no setup() call needed) plus :RustLsp commands.
 -- rust-analyzer itself comes from the rustup toolchain
 -- (scripts/install-rust.sh), deliberately NOT Mason's copy,
--- to avoid toolchain version mismatches. No debug adapter is
--- configured; add one later if needed (e.g. codelldb via Mason,
--- which rustaceanvim auto-detects).
+-- to avoid toolchain version mismatches. Debugging: codelldb comes
+-- from Mason (lua/kickstart/plugins/debug.lua) and is auto-detected;
+-- async Tokio tasks are inspected with tokio-console (also installed
+-- by scripts/install-rust.sh).
 -- ============================================================
 do
   -- NOTE: no `lazy = false`/ft spec needed: this plugin lazy-loads by design.
@@ -870,9 +871,8 @@ do
         },
       },
     },
-    -- No `dap` section: no debug adapter configured. To debug Rust
-    -- later, install one (e.g. `:MasonInstall codelldb`, which
-    -- rustaceanvim auto-detects) and it will just work.
+    -- No `dap` section needed: rustaceanvim auto-detects Mason's
+    -- codelldb and autoloads DAP configurations on attach.
   }
 end
 
@@ -913,10 +913,9 @@ do
       json = { 'biome' },
       css = { 'biome' },
       sql = { 'sql_formatter' },
-      -- Conform can also run multiple formatters sequentially
-      --
-      -- You can use 'stop_after_first' to run the first available formatter from the list
-      -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      -- Conform can also run multiple formatters sequentially.
+      -- Use 'stop_after_first' to run the first available formatter from the list,
+      -- e.g. typescript = { 'biome', stop_after_first = true },
     },
   }
 
@@ -1085,7 +1084,7 @@ do
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug'
+  require 'kickstart.plugins.debug'
   require 'kickstart.plugins.indent_line'
   require 'kickstart.plugins.lint'
   require 'kickstart.plugins.autopairs'

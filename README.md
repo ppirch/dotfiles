@@ -59,7 +59,7 @@ dotfiles/
 └── README.md
 ```
 
-To add a new config (e.g. tmux, bash), create a package directory with
+To add a new config (e.g. bash), create a package directory with
 the same layout it has under `$HOME`:
 
 ```sh
@@ -86,6 +86,14 @@ when missing, except where noted:
 - Python via [uv](https://docs.astral.sh/uv/) (optional, opt-in only:
   `./install.sh python` or `./scripts/install-python.sh`; installs a
   uv-managed Python without touching system Pythons)
+- Node.js via [nvm](https://github.com/nvm-sh/nvm) + `pnpm` (optional,
+  opt-in only: `./install.sh node` or `./scripts/install-node.sh`)
+- `tmux` + [TPM](https://github.com/tmux-plugins/tpm) plugins
+  (via `scripts/install-tmux.sh`, included in the default run)
+- [Ghostty](https://ghostty.org/) + Catppuccin theme file (optional,
+  opt-in only: `./install.sh ghostty` or `./scripts/install-ghostty.sh`)
+- [GitHub CLI](https://cli.github.com/) (optional, opt-in only:
+  `./install.sh gh` or `./scripts/install-gh.sh`)
 - A C compiler + `make` for building `telescope-fzf-native.nvim`
   (not auto-installed — on macOS: `xcode-select --install`)
 - JetBrainsMono + FiraCode [Nerd Fonts](https://www.nerdfonts.com/) (installed by
@@ -187,8 +195,10 @@ Rust support is built on [rustaceanvim](https://github.com/mrcjkb/rustaceanvim)
   deliberately **not** Mason's copy, to avoid toolchain version mismatches.
 - `rust`/`toml` Tree-sitter parsers install on first use, `rustfmt`
   runs via conform.nvim, Clippy is the default `check` command.
-- No debug adapter configured. To debug Rust later, run
-  `:MasonInstall codelldb` (auto-detected by rustaceanvim).
+- Debugging: `codelldb` via Mason (auto-detected by rustaceanvim) —
+  `:RustLsp debuggables` picks a target, `<F5>` launches. Async Tokio
+  tasks: `tokio-console` (installed by `./install.sh rust`; the app
+  needs `console-subscriber` + tokio's `tracing` feature).
 
 Verify with a scratch project:
 
@@ -224,8 +234,7 @@ No ESLint integration — say the word if you use it.
 `sqlfluff` lint-on-save (via nvim-lint, dialect `ansi` unless a
 `.sqlfluff` file overrides it) + `sql-formatter` (via conform.nvim) +
 the `sql` Tree-sitter parser. No SQL LSP: without a database
-connection the available servers stay silent, so they were dropped
-deliberately — connect a DB later and `sqls` becomes worth adding.
+connection the available servers stay silent, so none is configured.
 
 ## Layout conventions
 

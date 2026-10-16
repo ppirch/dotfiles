@@ -2,12 +2,12 @@
 # Standalone Rust toolchain installer (rustc/cargo via rustup).
 #
 # Installs rustup when missing, pins the stable toolchain, and ensures
-# the `rustfmt` component (used by conform.nvim) plus the `rust-analyzer`
-# CLI component. Safe to re-run: present tools are skipped.
+# the `rustfmt` component (used by conform.nvim), the `rust-analyzer` CLI
+# component (used by rustaceanvim in Neovim), and the `tokio-console`
+# async debugger. Safe to re-run: present tools are skipped.
 #
-# Note: Neovim itself gets rust-analyzer from Mason
-# (mason-tool-installer, driven by the `servers` table in init.lua),
-# so the editor works even on machines where this script never ran.
+# Note: rustaceanvim deliberately uses this toolchain's rust-analyzer,
+# not Mason's copy, to avoid toolchain version mismatches.
 #
 # Usage:
 #   scripts/install-rust.sh
@@ -41,5 +41,15 @@ for component in rustfmt rust-analyzer; do
     rustup component add "$component"
   fi
 done
+
+# tokio-console: TUI debugger for async Tokio apps. Requires the app to
+# depend on `console-subscriber` with tokio's `tracing` feature enabled,
+# then run `tokio-console` while the app runs.
+if command -v tokio-console >/dev/null 2>&1; then
+  echo "tokio-console already installed: $(tokio-console --version 2>&1 | head -n 1)"
+else
+  echo "installing tokio-console (this compiles a while on first run)..."
+  cargo install --locked tokio-console
+fi
 
 echo "done. ($(rustc --version), $(cargo --version))"

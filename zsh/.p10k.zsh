@@ -134,6 +134,9 @@
   # Add an empty line before each prompt.
   typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 
+  # Put the input line on its own line below the prompt segments (two-line prompt).
+  typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+
   # Connect left prompt lines with these symbols. You'll probably want to use the same color
   # as POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND below.
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='%242F╭─'

@@ -12,9 +12,7 @@ set -euo pipefail
 
 if command -v ghostty >/dev/null 2>&1; then
   echo "ghostty already present: $(ghostty --version 2>&1 | head -n 1)"
-  echo "done."
-  exit 0
-fi
+else
 
 case "$(uname -s)" in
   Darwin)
@@ -41,6 +39,23 @@ case "$(uname -s)" in
     echo "https://ghostty.org/docs/install/binary" >&2
     exit 1
     ;;
-esac
+  esac
+  echo "done. ($(ghostty --version 2>&1 | head -n 1))"
+fi
 
-echo "done. ($(ghostty --version 2>&1 | head -n 1))"
+# Official Catppuccin port (https://github.com/catppuccin/ghostty).
+# Shadows Ghostty's built-in theme of the same name once present.
+THEME_DIR="$HOME/.config/ghostty/themes"
+THEME_FILE="$THEME_DIR/catppuccin-macchiato"
+if [ ! -f "$THEME_FILE" ]; then
+  if ! command -v curl >/dev/null 2>&1; then
+    echo "error: curl is required to fetch the Catppuccin theme." >&2
+    exit 1
+  fi
+  echo "fetching Catppuccin Macchiato theme..."
+  mkdir -p "$THEME_DIR"
+  curl -LsSf -o "$THEME_FILE" \
+    https://github.com/catppuccin/ghostty/raw/main/themes/catppuccin-macchiato.conf
+else
+  echo "Catppuccin Macchiato theme already present"
+fi

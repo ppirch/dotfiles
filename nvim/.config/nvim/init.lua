@@ -452,11 +452,6 @@ do
   })
   vim.api.nvim_set_hl(0, 'netrwMarkFile', { link = 'Visual' })
 
-  -- Never reuse stale directory listings (default fastbrowse reuses them,
-  -- so moved/copied files only appear after a manual refresh). Costs
-  -- nothing for local browsing; only remote dirs would feel it.
-  vim.g.netrw_fastbrowse = 0
-
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup { signs = false }

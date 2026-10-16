@@ -2,7 +2,8 @@
 # Standalone bat installer (https://github.com/sharkdp/bat). Safe to
 # re-run: no-op when bat is present.
 #
-# Included in the default `install.sh` run, also works standalone:
+# Included in the default `install.sh` run (which also stows
+# bat/.config/bat/config), also works standalone:
 #   ./install.sh bat
 #
 # Usage:

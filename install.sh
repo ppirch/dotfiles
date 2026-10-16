@@ -80,10 +80,6 @@ for pkg in "${PACKAGES[@]}"; do
       "$DOTFILES_DIR/scripts/install-gh.sh"
       continue
       ;;
-    bat)
-      "$DOTFILES_DIR/scripts/install-bat.sh"
-      continue
-      ;;
   esac
 
   if [ ! -d "$DOTFILES_DIR/$pkg" ]; then
@@ -105,6 +101,10 @@ for pkg in "${PACKAGES[@]}"; do
 
   if [ "$pkg" = "ghostty" ]; then
     "$DOTFILES_DIR/scripts/install-ghostty.sh"
+  fi
+
+  if [ "$pkg" = "bat" ]; then
+    "$DOTFILES_DIR/scripts/install-bat.sh"
   fi
 
   echo "stowing $pkg -> $TARGET"

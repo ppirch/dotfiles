@@ -58,6 +58,10 @@ dotfiles/
 │   └── .gitconfig           # -> ~/.gitconfig (identity + aliases)
 ├── sqlfluff/                # Stow package
 │   └── .sqlfluff            # -> ~/.sqlfluff (global lint defaults)
+├── bat/                     # Stow package
+│   └── .config/
+│       └── bat/
+│           └── config       # -> ~/.config/bat/config (Catppuccin Macchiato)
 └── README.md
 ```
 

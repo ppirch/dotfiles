@@ -761,7 +761,6 @@ do
     pyright = {},
     ts_ls = {}, -- TypeScript ( powers Next.js / React editing )
     tailwindcss = {}, -- Tailwind CSS (completions/hover in class attributes)
-    sqls = {}, -- SQL (schema-aware completions need DB connections in config; see README)
     biome = {}, -- Biome LSP: lint for JS/TS/React (format via conform below)
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
@@ -838,6 +837,7 @@ do
     'markdownlint', -- Markdown linter (used by lua/kickstart/plugins/lint.lua when enabled)
     'biome', -- JS/TS/React formatter+linter (used by conform.nvim + LSP below)
     'sql-formatter', -- SQL formatter (used by conform.nvim below)
+    'sqlfluff', -- SQL linter (used by lua/kickstart/plugins/lint.lua)
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }

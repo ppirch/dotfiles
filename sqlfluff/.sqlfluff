@@ -1,0 +1,5 @@
+# ~/.sqlfluff — managed by dotfiles (sqlfluff/ package, GNU Stow).
+# Global sqlfluff defaults. A `.sqlfluff` file in a project directory
+# overrides these settings for that project.
+[sqlfluff]
+dialect = ansi

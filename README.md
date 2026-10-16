@@ -54,6 +54,8 @@ dotfiles/
 │           └── config       # -> ~/.config/ghostty/config
 ├── git/                     # Stow package
 │   └── .gitconfig           # -> ~/.gitconfig (identity + aliases)
+├── sqlfluff/                # Stow package
+│   └── .sqlfluff            # -> ~/.sqlfluff (global lint defaults)
 └── README.md
 ```
 
@@ -100,7 +102,7 @@ cd ~/dotfiles
 
 `install.sh` installs Stow if missing, runs each package's setup script
 (`scripts/install-*.sh`), then runs `stow -t "$HOME" <packages>`
-(default: `nvim zsh rust tmux fonts git`; `docker`/`python`/`node`/`gh` are
+(default: `nvim zsh rust tmux fonts git sqlfluff`; `docker`/`python`/`node`/`gh`/`ghostty` are
 opt-in only and stow nothing). `tmux` installs tmux if missing
 (`scripts/install-tmux.sh`) and stows `~/.tmux.conf`. To stow a single package manually:
 
@@ -219,11 +221,11 @@ No ESLint integration — say the word if you use it.
 
 ## SQL
 
-`sqls` (LSP, via Mason) + `sql-formatter` (via conform.nvim) + the `sql`
-Tree-sitter parser. Note: `sqls` only gives schema-aware completions
-once database connections are configured (see
-`sqls` docs for the connections setting); without that you still get
-syntax-level behavior plus formatting via `<leader>f`.
+`sqlfluff` lint-on-save (via nvim-lint, dialect `ansi` unless a
+`.sqlfluff` file overrides it) + `sql-formatter` (via conform.nvim) +
+the `sql` Tree-sitter parser. No SQL LSP: without a database
+connection the available servers stay silent, so they were dropped
+deliberately — connect a DB later and `sqls` becomes worth adding.
 
 ## Layout conventions
 

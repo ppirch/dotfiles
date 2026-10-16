@@ -2,7 +2,7 @@
 # Install/symlink dotfiles packages with GNU Stow.
 #
 # Usage:
-#   ./install.sh [package ...]   # default: nvim zsh rust tmux fonts git
+#   ./install.sh [package ...]   # default: nvim zsh rust tmux fonts git sqlfluff
 #
 # Examples:
 #   ./install.sh                 # stow the default packages
@@ -21,7 +21,7 @@ TARGET="$HOME"
 PACKAGES=("$@")
 
 if [ "${#PACKAGES[@]}" -eq 0 ]; then
-  PACKAGES=(nvim zsh rust tmux fonts git)
+  PACKAGES=(nvim zsh rust tmux fonts git sqlfluff)
 fi
 
 install_system_package() {

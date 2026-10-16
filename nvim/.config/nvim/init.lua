@@ -442,6 +442,16 @@ do
   })
   vim.api.nvim_set_hl(0, 'MsgArea', { link = 'StatusLine' })
 
+  -- netrw marks files via `netrwMarkFile`, which links to TabLineSel
+  -- (itself linked to Normal here) — i.e. marked files look unmarked.
+  -- Point it at Visual instead. Re-applied on colorscheme change so it
+  -- survives :colorscheme.
+  vim.api.nvim_create_autocmd('ColorScheme', {
+    group = vim.api.nvim_create_augroup('kickstart-netrw-mark', { clear = true }),
+    callback = function() vim.api.nvim_set_hl(0, 'netrwMarkFile', { link = 'Visual' }) end,
+  })
+  vim.api.nvim_set_hl(0, 'netrwMarkFile', { link = 'Visual' })
+
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup { signs = false }

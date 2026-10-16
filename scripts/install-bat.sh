@@ -12,35 +12,40 @@ set -euo pipefail
 
 if command -v bat >/dev/null 2>&1; then
   echo "bat already present: $(bat --version 2>&1 | head -n 1)"
-  echo "done."
-  exit 0
-fi
-
-if command -v apt-get >/dev/null 2>&1; then
-  sudo apt-get update
-  sudo apt-get install -y bat
-elif command -v dnf >/dev/null 2>&1; then
-  sudo dnf install -y bat
-elif command -v pacman >/dev/null 2>&1; then
-  sudo pacman -S --noconfirm --needed bat
-elif command -v brew >/dev/null 2>&1; then
-  brew install bat
 else
-  echo "error: no supported package manager found (apt/dnf/pacman/brew)." >&2
-  echo "Install bat manually: https://github.com/sharkdp/bat#installation" >&2
-  exit 1
+  if command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get update
+    sudo apt-get install -y bat
+  elif command -v dnf >/dev/null 2>&1; then
+    sudo dnf install -y bat
+  elif command -v pacman >/dev/null 2>&1; then
+    sudo pacman -S --noconfirm --needed bat
+  elif command -v brew >/dev/null 2>&1; then
+    brew install bat
+  else
+    echo "error: no supported package manager found (apt/dnf/pacman/brew)." >&2
+    echo "Install bat manually: https://github.com/sharkdp/bat#installation" >&2
+    exit 1
+  fi
+
+  # Debian/Ubuntu ship the binary as `batcat`; link it as `bat` when needed.
+  if ! command -v bat >/dev/null 2>&1 && command -v batcat >/dev/null 2>&1; then
+    mkdir -p "$HOME/.local/bin"
+    ln -sf "$(command -v batcat)" "$HOME/.local/bin/bat"
+    export PATH="$HOME/.local/bin:$PATH"
+  fi
+
+  if ! command -v bat >/dev/null 2>&1; then
+    echo "error: bat install finished but 'bat' is still missing." >&2
+    exit 1
+  fi
 fi
 
-# Debian/Ubuntu ship the binary as `batcat`; link it as `bat` when needed.
-if ! command -v bat >/dev/null 2>&1 && command -v batcat >/dev/null 2>&1; then
-  mkdir -p "$HOME/.local/bin"
-  ln -sf "$(command -v batcat)" "$HOME/.local/bin/bat"
-  export PATH="$HOME/.local/bin:$PATH"
-fi
-
-if ! command -v bat >/dev/null 2>&1; then
-  echo "error: bat install finished but 'bat' is still missing." >&2
-  exit 1
+# Register custom themes from ~/.config/bat/themes (e.g. the stowed
+# Catppuccin Macchiato, which bat does NOT ship built in). Skipped when
+# the config isn't stowed yet — install.sh also runs this after stowing.
+if [ -d "$HOME/.config/bat/themes" ]; then
+  bat cache --build
 fi
 
 echo "done. ($(bat --version 2>&1 | head -n 1))"

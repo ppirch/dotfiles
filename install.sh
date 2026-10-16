@@ -109,6 +109,14 @@ for pkg in "${PACKAGES[@]}"; do
 
   echo "stowing $pkg -> $TARGET"
   stow -R -d "$DOTFILES_DIR" -t "$TARGET" "$pkg"
+
+  if [ "$pkg" = "bat" ]; then
+    # Register stowed custom themes (setup runs before stow, so this
+    # has to happen after). Skipped when bat isn't on PATH yet.
+    if command -v bat >/dev/null 2>&1 && [ -d "$HOME/.config/bat/themes" ]; then
+      bat cache --build
+    fi
+  fi
 done
 
 if [[ " ${PACKAGES[*]} " == *" zsh "* ]] && [ "$(basename "${SHELL:-}")" != "zsh" ]; then

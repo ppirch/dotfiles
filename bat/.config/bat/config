@@ -2,5 +2,6 @@
 # See `bat --help`, `bat --list-themes` and https://github.com/sharkdp/bat#configuration-file
 
 # Catppuccin Macchiato, matching everything else (nvim, tmux, ghostty).
-# Shipped built into bat itself: `bat --list-themes`.
+# Via the vendored official port in themes/ (bat < 0.26 doesn't bundle it;
+# `bat cache --build` registers it — see scripts/install-bat.sh).
 --theme="Catppuccin Macchiato"

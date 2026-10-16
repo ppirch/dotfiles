@@ -165,6 +165,11 @@ do
   -- Show which line your cursor is on
   vim.o.cursorline = true
 
+  -- True color support (required by catppuccin and other modern themes).
+  -- Harmless on terminals without it; without this Neovim falls back to
+  -- 256-color approximations (notably wrong inside browser terminals).
+  vim.o.termguicolors = true
+
   -- Minimal number of screen lines to keep above and below the cursor.
   vim.o.scrolloff = 10
 

@@ -13,7 +13,8 @@ if command -v tmux >/dev/null 2>&1; then
   echo "tmux already present: $(tmux -V)"
 else
   if command -v apt-get >/dev/null 2>&1; then
-    sudo apt-get update && sudo apt-get install -y tmux
+    sudo apt-get update
+    sudo apt-get install -y tmux
   elif command -v dnf >/dev/null 2>&1; then
     sudo dnf install -y tmux
   elif command -v pacman >/dev/null 2>&1; then
@@ -25,6 +26,11 @@ else
     echo "Install tmux manually: https://github.com/tmux/tmux/wiki/Installing" >&2
     exit 1
   fi
+fi
+
+if ! command -v tmux >/dev/null 2>&1; then
+  echo "error: tmux install finished but 'tmux' is still missing." >&2
+  exit 1
 fi
 
 # TPM (tmux plugin manager), required by ~/.tmux.conf (`run .../tpm/tpm`).

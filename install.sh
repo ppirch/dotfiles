@@ -27,7 +27,8 @@ fi
 install_system_package() {
   local pkg="$1"
   if command -v apt-get >/dev/null 2>&1; then
-    sudo apt-get update && sudo apt-get install -y "$pkg"
+    sudo apt-get update
+    sudo apt-get install -y "$pkg"
   elif command -v dnf >/dev/null 2>&1; then
     sudo dnf install -y "$pkg"
   elif command -v pacman >/dev/null 2>&1; then

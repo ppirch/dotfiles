@@ -20,7 +20,8 @@ set -euo pipefail
 
 install_packages() {
   if command -v apt-get >/dev/null 2>&1; then
-    sudo apt-get update && sudo apt-get install -y "$@"
+    sudo apt-get update
+    sudo apt-get install -y "$@"
   elif command -v dnf >/dev/null 2>&1; then
     sudo dnf install -y "$@"
   elif command -v pacman >/dev/null 2>&1; then
@@ -155,6 +156,18 @@ else
       fi
     fi
   fi
+fi
+
+# Companions installed above have no version gate; fail loudly if the
+# install attempt left them missing (a failed apt update must not read
+# as success).
+command -v rg >/dev/null 2>&1 || {
+  echo "error: ripgrep install finished but 'rg' is still missing." >&2
+  exit 1
+}
+if ! command -v fd >/dev/null 2>&1 && ! command -v fdfind >/dev/null 2>&1; then
+  echo "error: fd install finished but 'fd'/'fdfind' is still missing." >&2
+  exit 1
 fi
 
 # Authoritative installs (version-checked, manager-independent).

@@ -30,7 +30,8 @@ if command -v apt-get >/dev/null 2>&1; then
   sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
     | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
-  sudo apt-get update && sudo apt-get install -y gh
+  sudo apt-get update
+  sudo apt-get install -y gh
 elif command -v dnf >/dev/null 2>&1; then
   sudo dnf install -y 'dnf-command(config-manager)' >/dev/null 2>&1 || true
   sudo dnf config-manager addrepo --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
@@ -42,6 +43,11 @@ elif command -v brew >/dev/null 2>&1; then
 else
   echo "error: no supported package manager found (apt/dnf/pacman/brew)." >&2
   echo "Install gh manually: https://github.com/cli/cli#installation" >&2
+  exit 1
+fi
+
+if ! command -v gh >/dev/null 2>&1; then
+  echo "error: gh install finished but 'gh' is still missing." >&2
   exit 1
 fi
 

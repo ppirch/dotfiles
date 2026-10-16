@@ -21,7 +21,8 @@ OMZ_REPO="${OMZ_REPO:-https://github.com/ohmyzsh/ohmyzsh.git}"
 install_system_package() {
   local pkg="$1"
   if command -v apt-get >/dev/null 2>&1; then
-    sudo apt-get update && sudo apt-get install -y "$pkg"
+    sudo apt-get update
+    sudo apt-get install -y "$pkg"
   elif command -v dnf >/dev/null 2>&1; then
     sudo dnf install -y "$pkg"
   elif command -v pacman >/dev/null 2>&1; then
@@ -37,6 +38,11 @@ install_system_package() {
 if ! command -v zsh >/dev/null 2>&1; then
   echo "zsh not found, attempting to install..."
   install_system_package zsh
+fi
+
+if ! command -v zsh >/dev/null 2>&1; then
+  echo "error: zsh install finished but 'zsh' is still missing." >&2
+  exit 1
 fi
 
 if ! command -v git >/dev/null 2>&1; then

@@ -28,7 +28,8 @@ case "$(uname -s)" in
     ;;
   Linux)
     if command -v apt-get >/dev/null 2>&1; then
-      sudo apt-get update && sudo apt-get install -y docker.io
+      sudo apt-get update
+      sudo apt-get install -y docker.io
     elif command -v dnf >/dev/null 2>&1; then
       sudo dnf install -y docker
     elif command -v pacman >/dev/null 2>&1; then
@@ -36,6 +37,10 @@ case "$(uname -s)" in
     else
       echo "error: no supported package manager found (apt/dnf/pacman)." >&2
       echo "Install Docker Engine manually: https://docs.docker.com/engine/install/" >&2
+      exit 1
+    fi
+    if ! command -v docker >/dev/null 2>&1; then
+      echo "error: docker install finished but 'docker' is still missing." >&2
       exit 1
     fi
     echo "done. You may need: sudo usermod -aG docker \"\$USER\" (then log out/in)."

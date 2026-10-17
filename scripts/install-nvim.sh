@@ -12,7 +12,9 @@
 #   official neovim.io release tarball is used instead of the package
 #   manager. On macOS Homebrew's neovim is always fresh.
 # - The tree-sitter CLI must be >= 0.25 for nvim-treesitter's `main`
-#   branch. Apt's 0.20 is replaced with a GitHub release binary.
+#   branch. Distro/brew packages lag (apt ships 0.20), so it is built
+#   with `cargo install tree-sitter-cli`; rustup is bootstrapped if
+#   cargo is missing.
 #
 # Usage:
 #   scripts/install-nvim.sh
@@ -79,31 +81,31 @@ ts_cli_ok() {
   [ "${major:-0}" -gt 0 ] || [ "${minor:-0}" -ge 25 ]
 }
 
-# GitHub release binary (Linux). Replaces fossils like apt's 0.20.
-install_ts_cli_binary() {
-  local asset
-  case "$(uname -m)" in
-    x86_64) asset="tree-sitter-linux-x64.gz" ;;
-    aarch64 | arm64) asset="tree-sitter-linux-arm64.gz" ;;
-    *)
-      echo "error: unsupported arch '$(uname -m)' for tree-sitter binaries." >&2
-      exit 1
-      ;;
-  esac
-  if ! command -v curl >/dev/null 2>&1; then
-    echo "error: curl is required to install the tree-sitter CLI." >&2
-    exit 1
+# Install the tree-sitter CLI via cargo. Distro/brew formulas lag behind
+# the >= 0.25 requirement, and the tree-sitter docs recommend cargo.
+# Bootstraps rustup first when cargo is missing.
+install_ts_cli_cargo() {
+  if ! command -v cargo >/dev/null 2>&1 && [ -f "$HOME/.cargo/env" ]; then
+    # shellcheck disable=SC1091
+    . "$HOME/.cargo/env"
   fi
-  echo "installing tree-sitter CLI from GitHub releases..."
-  local tmpdir
-  tmpdir="$(mktemp -d)"
-  trap 'rm -rf "$tmpdir"' EXIT
-  curl -fsSL "https://github.com/tree-sitter/tree-sitter/releases/latest/download/${asset}" -o "$tmpdir/ts.gz"
-  gunzip -f "$tmpdir/ts.gz"
-  chmod +x "$tmpdir/${asset%.gz}"
-  sudo install -m755 "$tmpdir/${asset%.gz}" /usr/local/bin/tree-sitter
-  trap - EXIT
-  rm -rf "$tmpdir"
+  if ! command -v cargo >/dev/null 2>&1; then
+    command -v curl >/dev/null 2>&1 || {
+      echo "error: curl is required to install rustup (for cargo)." >&2
+      return 1
+    }
+    echo "installing rustup (stable toolchain)..."
+    curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    # shellcheck disable=SC1091
+    [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+  fi
+  if ! command -v cargo >/dev/null 2>&1; then
+    echo "error: rustup ran but cargo is not on PATH." >&2
+    echo "Make sure \"\$HOME/.cargo/bin\" is on PATH (or source '\$HOME/.cargo/env')." >&2
+    return 1
+  fi
+  echo "installing tree-sitter CLI via cargo (this compiles a while on first run)..."
+  cargo install --locked tree-sitter-cli
 }
 
 missing=()
@@ -119,17 +121,21 @@ if [ "${#missing[@]}" -eq 0 ]; then
 else
   echo "missing tools: ${missing[*]}"
   if [ "$(uname -s)" = "Darwin" ]; then
-    # Homebrew's `tree-sitter` formula is the library only; the CLI is `tree-sitter-cli`.
-    # Homebrew's neovim is always fresh enough for `vim.pack`.
+    # Homebrew's `tree-sitter` formula is the library only, and the CLI
+    # formula can lag, so tree-sitter is skipped here and installed via
+    # cargo below (version-checked). Homebrew's neovim is always fresh
+    # enough for `vim.pack`.
     brew_pkgs=()
     for tool in "${missing[@]}"; do
       case "$tool" in
         rg) brew_pkgs+=(ripgrep) ;;
-        tree-sitter) brew_pkgs+=(tree-sitter-cli) ;;
+        tree-sitter) ;;
         *) brew_pkgs+=("$tool") ;;
       esac
     done
-    install_packages "${brew_pkgs[@]}"
+    if [ "${#brew_pkgs[@]}" -gt 0 ]; then
+      install_packages "${brew_pkgs[@]}"
+    fi
   else
     # Never take neovim/tree-sitter from Linux package managers here:
     # their versions (e.g. nvim 0.9, ts-cli 0.20) predate `vim.pack`
@@ -183,12 +189,25 @@ nvim_has_pack || {
   exit 1
 }
 
-if ! ts_cli_ok; then
+# Building tree-sitter-cli via cargo (and telescope-fzf-native later)
+# needs a C compiler + make.
+if ! command -v cc >/dev/null 2>&1 || ! command -v make >/dev/null 2>&1; then
+  echo "note: a C compiler + make are needed to build tree-sitter-cli (cargo) and telescope-fzf-native."
   if [ "$(uname -s)" = "Darwin" ]; then
-    install_packages tree-sitter-cli
+    echo "Install them with: xcode-select --install"
   else
-    install_ts_cli_binary
+    echo "Install them with your package manager, e.g.:"
+    echo "  Debian/Ubuntu: sudo apt-get install -y build-essential"
+    echo "  Fedora:        sudo dnf groupinstall -y 'Development Tools'"
+    echo "  Arch:          sudo pacman -S --needed base-devel"
   fi
+fi
+
+if ! ts_cli_ok; then
+  install_ts_cli_cargo || {
+    echo "error: could not install tree-sitter CLI via cargo." >&2
+    exit 1
+  }
 fi
 ts_cli_ok || {
   echo "error: tree-sitter CLI still too old after install." >&2
@@ -200,18 +219,6 @@ if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
   mkdir -p "$HOME/.local/bin"
   ln -sf "$(command -v fdfind)" "$HOME/.local/bin/fd"
   echo "created ~/.local/bin/fd shim -> $(command -v fdfind)"
-fi
-
-if ! command -v cc >/dev/null 2>&1 || ! command -v make >/dev/null 2>&1; then
-  echo "note: a C compiler + make are needed to build telescope-fzf-native."
-  if [ "$(uname -s)" = "Darwin" ]; then
-    echo "Install them with: xcode-select --install"
-  else
-    echo "Install them with your package manager, e.g.:"
-    echo "  Debian/Ubuntu: sudo apt-get install -y build-essential"
-    echo "  Fedora:        sudo dnf groupinstall -y 'Development Tools'"
-    echo "  Arch:          sudo pacman -S --needed base-devel"
-  fi
 fi
 
 echo "done."

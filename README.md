@@ -198,6 +198,8 @@ Useful commands: `:checkhealth`, `:lua vim.pack.update(nil, { offline = true })`
 (inspect plugin state), `:lua vim.pack.update()` (update plugins).
 
 Search your config files with `<leader>sn`, Neovim help with `<leader>sh`.
+Browse files with `<leader>e` (mini.files; `:edit <dir>`/`nvim <dir>` open the
+same explorer instead of netrw, while `:Explore` still uses netrw).
 Run `:Tutor` if you are new to Vim motions.
 
 ## Rust

@@ -265,9 +265,7 @@ do
     callback = function(ev)
       local mark = vim.api.nvim_buf_get_mark(ev.buf, '"')
       local lines = vim.api.nvim_buf_line_count(ev.buf)
-      if mark[1] > 0 and mark[1] <= lines then
-        vim.api.nvim_win_set_cursor(0, mark)
-      end
+      if mark[1] > 0 and mark[1] <= lines then vim.api.nvim_win_set_cursor(0, mark) end
     end,
   })
 end
@@ -501,6 +499,25 @@ do
   -- - sd'   - [S]urround [D]elete [']quotes
   -- - sr)'  - [S]urround [R]eplace [)] [']
   require('mini.surround').setup()
+
+  -- Browse and manipulate the file system (Miller columns).
+  --
+  -- `use_as_default_explorer` (default) takes over `:edit <dir>`/`nvim <dir>`
+  -- from netrw, and from Neovim's builtin `dir.lua` browser on 0.13+.
+  -- `:Explore` still opens netrw.
+  --
+  -- Buffer-local keys: `l`/`h` in/out of a directory, `=` applies pending
+  -- changes, `q` closes, `g?` shows the rest (create/rename/delete/copy by
+  -- editing the listing like a normal buffer).
+  require('mini.files').setup {
+    windows = { preview = true },
+  }
+
+  vim.keymap.set('n', '<leader>e', function()
+    -- Anchor on the current file when there is one, else the cwd.
+    local name = vim.api.nvim_buf_get_name(0)
+    require('mini.files').open(name ~= '' and name or vim.fn.getcwd(), true)
+  end, { desc = '[E]xplore files (reveal current file)' })
 
   -- Simple and easy statusline.
   --  You could remove this setup call if you don't like it,
@@ -1041,7 +1058,29 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'css', 'diff', 'html', 'javascript', 'jsdoc', 'json', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'rust', 'sql', 'toml', 'tsx', 'typescript', 'vim', 'vimdoc' }
+  local parsers = {
+    'bash',
+    'c',
+    'css',
+    'diff',
+    'html',
+    'javascript',
+    'jsdoc',
+    'json',
+    'lua',
+    'luadoc',
+    'markdown',
+    'markdown_inline',
+    'python',
+    'query',
+    'rust',
+    'sql',
+    'toml',
+    'tsx',
+    'typescript',
+    'vim',
+    'vimdoc',
+  }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer

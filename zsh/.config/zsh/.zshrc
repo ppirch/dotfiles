@@ -1,6 +1,7 @@
-# ~/.zshrc — managed by dotfiles (zsh/ package, GNU Stow).
-# Edit the copy in the repo, then re-stow: `stow -R -t "$HOME" zsh`.
-# Machine-specific overrides go in ~/.zshrc.local (sourced below, never committed).
+# ~/.config/zsh/.zshrc — the shared base, managed by dotfiles (zsh/ package,
+# GNU Stow). Its local copy is a symlink into this repo, so edit it here and
+# re-stow: `stow -R -t "$HOME" zsh`.
+# Machine-specific overrides go in ~/.zshrc, the real (untracked) entry file.
 
 # Powerlevel10k instant prompt (must stay at the very top of this file).
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -64,9 +65,6 @@ if ! command -v nvm >/dev/null 2>&1; then
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
   [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 fi
-
-# --- local overrides (not committed) ------------------------------------------
-[ -f "$HOME/.zshrc.local" ] && . "$HOME/.zshrc.local"
 
 # Powerlevel10k config (tracked in this repo; regenerate with `p10k configure`).
 [ -f "$HOME/.p10k.zsh" ] && . "$HOME/.p10k.zsh"

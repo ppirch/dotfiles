@@ -5,7 +5,7 @@
 # installed under it, and removes the nvm-managed yarn (pnpm is the
 # default package manager here). Safe to re-run: present tools are
 # skipped. The oh-my-zsh `nvm` plugin (or the fallback block in
-# zsh/.zshrc) loads nvm into interactive shells.
+# zsh/.config/zsh/.zshrc) loads nvm into interactive shells.
 #
 # Usage:
 #   scripts/install-node.sh

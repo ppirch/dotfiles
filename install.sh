@@ -43,10 +43,42 @@ install_system_package() {
 }
 
 # Clones oh-my-zsh + extra plugins via scripts/install-omz.sh (plain
-# `git clone`, so the stowed ~/.zshrc symlink is never touched).
+# `git clone`, so nothing at ~/.zshrc is touched).
 # No-ops when already installed.
 bootstrap_oh_my_zsh() {
   "$DOTFILES_DIR/scripts/install-omz.sh"
+}
+
+# The zsh base is stowed to ~/.config/zsh/.zshrc; ~/.p10k.zsh stays stowed as
+# before. Earlier revisions also stowed ~/.zshrc directly, so replace that
+# (now dangling) symlink with a real ~/.zshrc that sources the base. An
+# existing real ~/.zshrc is never overwritten.
+setup_zsh_rc() {
+  local link="$HOME/.zshrc" target abs
+  if [ -L "$link" ]; then
+    target="$(readlink "$link")"
+    case "$target" in
+      /*) abs="$target" ;;
+      *) abs="$(dirname "$link")/$target" ;;
+    esac
+    case "$abs" in
+      "$DOTFILES_DIR"/*)
+        echo "removing old stow symlink $link"
+        rm -f "$link"
+        ;;
+    esac
+  fi
+
+  if [ ! -e "$link" ]; then
+    echo "creating ~/.zshrc (sources the shared base)"
+    cat >"$link" <<'EOF'
+# ~/.zshrc — local entry point (NOT managed by stow; edit freely).
+# The shared base is tracked in the repo and stowed to ~/.config/zsh/.zshrc.
+[ -f "$HOME/.config/zsh/.zshrc" ] && . "$HOME/.config/zsh/.zshrc"
+
+# --- machine-specific overrides ---
+EOF
+  fi
 }
 
 if ! command -v stow >/dev/null 2>&1; then
@@ -94,6 +126,7 @@ for pkg in "${PACKAGES[@]}"; do
 
   if [ "$pkg" = "zsh" ]; then
     bootstrap_oh_my_zsh
+    setup_zsh_rc
   fi
 
   if [ "$pkg" = "nvim" ]; then

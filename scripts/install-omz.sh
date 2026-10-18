@@ -3,8 +3,8 @@
 #
 # Installs the zsh binary (if missing) and clones oh-my-zsh plus extra
 # plugins with git. Safe to re-run: everything is skipped when present.
-# Uses plain `git clone` (not the OMZ installer script) so an existing
-# ~/.zshrc — e.g. the one stowed from this repo — is never touched.
+# Uses plain `git clone` (not the OMZ installer script) so your existing
+# ~/.zshrc is never touched.
 #
 # Usage:
 #   scripts/install-omz.sh

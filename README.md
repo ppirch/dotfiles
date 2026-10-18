@@ -48,7 +48,10 @@ dotfiles/
 │           ├── init.lua
 │           └── lua/
 ├── zsh/                     # Stow package
-│   └── .zshrc               # -> ~/.zshrc (oh-my-zsh based)
+│   ├── .config/
+│   │   └── zsh/
+│   │       └── .zshrc       # -> ~/.config/zsh/.zshrc (oh-my-zsh base)
+│   └── .p10k.zsh            # -> ~/.p10k.zsh (prompt)
 ├── tmux/                    # Stow package
 │   └── .tmux.conf           # -> ~/.tmux.conf
 ├── ghostty/                 # Stow package (opt-in: ./install.sh ghostty)
@@ -140,16 +143,24 @@ stow -R -t "$HOME" nvim     # relink (after adding files)
 
 ## Zsh / oh-my-zsh
 
-The `zsh` package symlinks `~/.zshrc`. When you run `./install.sh zsh`
+The `zsh` package stows the shared base to `~/.config/zsh/.zshrc` and the
+prompt to `~/.p10k.zsh`. When you run `./install.sh zsh`
 (or the default `./install.sh`), it also:
 
 1. Installs `zsh` itself if missing.
 2. Clones [oh-my-zsh](https://ohmyz.sh/) to `~/.oh-my-zsh` if missing
-   (plain `git clone`, so your stowed `.zshrc` is never overwritten).
+   (plain `git clone`, so nothing at `~/.zshrc` is touched).
 3. Clones the extra plugins `zsh-autosuggestions` and
    `zsh-syntax-highlighting` into `~/.oh-my-zsh/custom/plugins/`.
 4. Clones the `powerlevel10k` theme into
    `~/.oh-my-zsh/custom/themes/` and selects it (`ZSH_THEME`).
+5. Creates `~/.zshrc` — a real, untracked file that simply sources the
+   base — if it does not already exist. An existing real `~/.zshrc` is
+   never overwritten.
+
+`~/.zshrc` is yours: put machine-specific settings there and they never
+touch the repo. The shared base stays in sync through the stow symlink.
+(Earlier revisions based `~/.zshrc` on `.zshrc.local`; that split is gone.)
 
 On a new machine (or now, after this change), run `p10k configure`
 once in a terminal and answer the wizard — it writes `~/.p10k.zsh`
@@ -157,14 +168,13 @@ once in a terminal and answer the wizard — it writes `~/.p10k.zsh`
 is tracked in `zsh/.p10k.zsh`, so re-running the wizard to tweak the
 prompt is a normal config change: commit and push it.
 
-The `.zshrc` enables the `git`, `nvm`, `node`, `npm`, `python`, `uv`,
+The base enables the `git`, `nvm`, `node`, `npm`, `python`, `uv`,
 `vscode` and `docker` oh-my-zsh plugins (+ `zsh-autosuggestions` and
 `zsh-syntax-highlighting`); `pnpm` has no oh-my-zsh plugin and is
 installed globally under the nvm-managed Node instead. It picks up
 Homebrew (`/opt/homebrew` on Apple Silicon, `/usr/local` on Intel Macs),
 sets `nvim` as `$EDITOR` when available, and restores your tool paths
-(`~/.local/bin`, cargo, nvm, opencode). Machine-specific overrides go in
-`~/.zshrc.local` (sourced if present, never committed).
+(`~/.local/bin`, cargo, nvm).
 
 For just the shell without stowing, the oh-my-zsh setup also works standalone:
 

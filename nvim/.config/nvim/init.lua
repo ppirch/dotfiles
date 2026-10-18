@@ -500,24 +500,9 @@ do
   -- - sr)'  - [S]urround [R]eplace [)] [']
   require('mini.surround').setup()
 
-  -- Browse and manipulate the file system (Miller columns).
-  --
-  -- `use_as_default_explorer` (default) takes over `:edit <dir>`/`nvim <dir>`
-  -- from netrw, and from Neovim's builtin `dir.lua` browser on 0.13+.
-  -- `:Explore` still opens netrw.
-  --
-  -- Buffer-local keys: `l`/`h` in/out of a directory, `=` applies pending
-  -- changes, `q` closes, `g?` shows the rest (create/rename/delete/copy by
-  -- editing the listing like a normal buffer).
-  require('mini.files').setup {
-    windows = { preview = true },
-  }
-
-  vim.keymap.set('n', '<leader>e', function()
-    -- Anchor on the current file when there is one, else the cwd.
-    local name = vim.api.nvim_buf_get_name(0)
-    require('mini.files').open(name ~= '' and name or vim.fn.getcwd(), true)
-  end, { desc = '[E]xplore files (reveal current file)' })
+  -- File browser: netrw (built in). mini.files is disabled, so `:edit <dir>`,
+  -- `nvim <dir>` and `:Explore` all use netrw.
+  vim.keymap.set('n', '<leader>e', '<cmd>Explore<CR>', { desc = '[E]xplore files (netrw)' })
 
   -- Simple and easy statusline.
   --  You could remove this setup call if you don't like it,

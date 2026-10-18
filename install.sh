@@ -2,7 +2,7 @@
 # Install/symlink dotfiles packages with GNU Stow.
 #
 # Usage:
-#   ./install.sh [package ...]   # default: nvim zsh rust tmux fonts git sqlfluff bat python node
+#   ./install.sh [package ...]   # default: nvim zsh rust tmux fonts git sqlfluff bat python node tree
 #
 # Examples:
 #   ./install.sh                 # stow the default packages
@@ -14,6 +14,7 @@
 #   ./install.sh node            # install Node via nvm (nothing stowed)
 #   ./install.sh gh              # optional: install GitHub CLI (nothing stowed)
 #   ./install.sh bat             # install bat (nothing stowed)
+#   ./install.sh tree            # install tree (nothing stowed)
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -21,7 +22,7 @@ TARGET="$HOME"
 PACKAGES=("$@")
 
 if [ "${#PACKAGES[@]}" -eq 0 ]; then
-  PACKAGES=(nvim zsh rust tmux fonts git sqlfluff bat python node)
+  PACKAGES=(nvim zsh rust tmux fonts git sqlfluff bat python node tree)
 fi
 
 install_system_package() {
@@ -78,6 +79,10 @@ for pkg in "${PACKAGES[@]}"; do
       ;;
     gh)
       "$DOTFILES_DIR/scripts/install-gh.sh"
+      continue
+      ;;
+    tree)
+      "$DOTFILES_DIR/scripts/install-tree.sh"
       continue
       ;;
   esac

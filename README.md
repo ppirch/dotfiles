@@ -40,7 +40,8 @@ dotfiles/
 │   ├── install-fonts.sh     # JetBrainsMono + FiraCode Nerd Fonts (required)
 │   ├── install-ghostty.sh   # ghostty + theme, standalone, opt-in only
 │   ├── install-gh.sh        # GitHub CLI, standalone, opt-in only
-│   └── install-bat.sh       # bat (better cat), standalone
+│   ├── install-bat.sh       # bat (better cat), standalone
+│   └── install-tree.sh      # tree (directory listings), standalone
 ├── nvim/                    # Stow package
 │   └── .config/
 │       └── nvim/            # -> ~/.config/nvim
@@ -104,6 +105,9 @@ when missing, except where noted:
 - [bat](https://github.com/sharkdp/bat) (better `cat` with syntax
   highlighting, via `./install.sh bat` or `./scripts/install-bat.sh`,
   included in the default run)
+- [tree](https://oldmanprogrammer.net/source.php?dir=projects/tree)
+  (recursive directory listings, via `./install.sh tree` or
+  `./scripts/install-tree.sh`, included in the default run)
 - A C compiler + `make` for building `telescope-fzf-native.nvim`
   (not auto-installed — on macOS: `xcode-select --install`)
 - JetBrainsMono + FiraCode [Nerd Fonts](https://www.nerdfonts.com/) (installed by
@@ -120,7 +124,7 @@ cd ~/dotfiles
 
 `install.sh` installs Stow if missing, runs each package's setup script
 (`scripts/install-*.sh`), then runs `stow -t "$HOME" <packages>`
-(default: `nvim zsh rust tmux fonts git sqlfluff bat python node`; `docker`/`gh`/`ghostty` are
+(default: `nvim zsh rust tmux fonts git sqlfluff bat python node tree`; `docker`/`gh`/`ghostty` are
 opt-in only and stow nothing). `tmux` installs tmux if missing
 (`scripts/install-tmux.sh`) and stows `~/.tmux.conf`. To stow a single package manually:
 

@@ -86,6 +86,8 @@ do
     -- Document existing key chains
     spec = {
       { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
+      { '<leader>g', group = '[G]it' },
+      { '<leader>e', group = '[E]xplorer' },
       { '<leader>t', group = '[T]oggle' },
       { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } }, -- Enable gitsigns recommended keymaps first
       { 'gr', group = 'LSP Actions', mode = { 'n' } },
@@ -162,10 +164,6 @@ do
   -- - sd'   - [S]urround [D]elete [']quotes
   -- - sr)'  - [S]urround [R]eplace [)] [']
   require('mini.surround').setup()
-
-  -- File browser: netrw (built in). mini.files is disabled, so `:edit <dir>`,
-  -- `nvim <dir>` and `:Explore` all use netrw.
-  vim.keymap.set('n', '<leader>e', '<cmd>Explore<CR>', { desc = '[E]xplore files (netrw)' })
 
   -- Simple and easy statusline.
   --  You could remove this setup call if you don't like it,

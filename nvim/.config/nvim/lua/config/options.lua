@@ -34,7 +34,6 @@ do
   vim.o.expandtab = true
   vim.o.smartindent = true
   vim.o.wrap = false
-  vim.o.colorcolumn = '80'
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'

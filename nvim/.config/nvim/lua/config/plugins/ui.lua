@@ -95,15 +95,15 @@ do
   }
 
   -- [[ Colorscheme ]]
-  -- catppuccin macchiato. Other flavours: 'catppuccin-latte',
-  -- 'catppuccin-frappe', 'catppuccin-mocha'.
+  -- Catppuccin Mocha with a transparent editor background.
   vim.pack.add { gh 'catppuccin/nvim' }
   require('catppuccin').setup {
-    flavour = 'macchiato',
+    flavour = 'mocha',
+    transparent_background = true,
   }
 
   -- Load the colorscheme here.
-  vim.cmd.colorscheme 'catppuccin-macchiato'
+  vim.cmd.colorscheme 'catppuccin'
 
   -- Blend the cmdline row (the "blank" line above tmux's bar) with the
   -- statusline. Re-applied on colorscheme change so it survives :colorscheme.

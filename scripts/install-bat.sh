@@ -41,9 +41,9 @@ else
   fi
 fi
 
-# Register custom themes from ~/.config/bat/themes (e.g. the stowed
-# Catppuccin Macchiato, which bat does NOT ship built in). Skipped when
-# the config isn't stowed yet — install.sh also runs this after stowing.
+# Register custom themes from ~/.config/bat/themes (including the stowed
+# Catppuccin Mocha port). Skipped when the config isn't stowed yet —
+# install.sh also runs this after stowing.
 if [ -d "$HOME/.config/bat/themes" ]; then
   bat cache --build
 fi

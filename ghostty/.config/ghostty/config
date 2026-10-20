@@ -1,9 +1,10 @@
 # ~/.config/ghostty/config — managed by dotfiles (ghostty/ package, GNU Stow).
 # See `ghostty +list-fonts`, `ghostty +list-themes` and https://ghostty.org/docs/config
 
-# Catppuccin Macchiato via the official port (themes/catppuccin-macchiato
-# is fetched by scripts/install-ghostty.sh and shadows the built-in
-# theme of the same name).
-theme = catppuccin-macchiato
+# Catppuccin Mocha via the official port, fetched by scripts/install-ghostty.sh.
+theme = catppuccin-mocha
+background-opacity = 0.85
+background-blur = true
+background-opacity-cells = true
 
 font-family = "JetBrainsMono Nerd Font"

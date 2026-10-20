@@ -46,16 +46,16 @@ fi
 # Official Catppuccin port (https://github.com/catppuccin/ghostty).
 # Shadows Ghostty's built-in theme of the same name once present.
 THEME_DIR="$HOME/.config/ghostty/themes"
-THEME_FILE="$THEME_DIR/catppuccin-macchiato"
+THEME_FILE="$THEME_DIR/catppuccin-mocha"
 if [ ! -f "$THEME_FILE" ]; then
   if ! command -v curl >/dev/null 2>&1; then
     echo "error: curl is required to fetch the Catppuccin theme." >&2
     exit 1
   fi
-  echo "fetching Catppuccin Macchiato theme..."
+  echo "fetching Catppuccin Mocha theme..."
   mkdir -p "$THEME_DIR"
   curl -LsSf -o "$THEME_FILE" \
-    https://github.com/catppuccin/ghostty/raw/main/themes/catppuccin-macchiato.conf
+    https://raw.githubusercontent.com/catppuccin/ghostty/main/themes/catppuccin-mocha.conf
 else
-  echo "Catppuccin Macchiato theme already present"
+  echo "Catppuccin Mocha theme already present"
 fi

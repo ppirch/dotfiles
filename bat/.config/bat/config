@@ -1,7 +1,6 @@
 # ~/.config/bat/config — managed by dotfiles (bat/ package, GNU Stow).
 # See `bat --help`, `bat --list-themes` and https://github.com/sharkdp/bat#configuration-file
 
-# Catppuccin Macchiato, matching everything else (nvim, tmux, ghostty).
-# Via the vendored official port in themes/ (bat < 0.26 doesn't bundle it;
-# `bat cache --build` registers it — see scripts/install-bat.sh).
---theme="Catppuccin Macchiato"
+# Catppuccin Mocha, matching Neovim, tmux, and Ghostty. The official theme
+# port is stored in themes/ and registered by scripts/install-bat.sh.
+--theme="Catppuccin Mocha"

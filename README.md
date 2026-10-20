@@ -65,7 +65,7 @@ dotfiles/
 ├── bat/                     # Stow package
 │   └── .config/
 │       └── bat/
-│           └── config       # -> ~/.config/bat/config (Catppuccin Macchiato)
+│           └── config       # -> ~/.config/bat/config (Catppuccin Mocha)
 └── README.md
 ```
 
@@ -101,7 +101,7 @@ when missing, except where noted:
   included in the default run)
 - `tmux` + [TPM](https://github.com/tmux-plugins/tpm) plugins
   (via `scripts/install-tmux.sh`, included in the default run)
-- [Ghostty](https://ghostty.org/) + Catppuccin theme file (optional,
+- [Ghostty](https://ghostty.org/) + Catppuccin Mocha theme file (optional,
   opt-in only: `./install.sh ghostty` or `./scripts/install-ghostty.sh`)
 - [GitHub CLI](https://cli.github.com/) (optional, opt-in only:
   `./install.sh gh` or `./scripts/install-gh.sh`)

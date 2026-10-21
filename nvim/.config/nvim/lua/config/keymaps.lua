@@ -10,6 +10,28 @@ do
   --  See `:help hlsearch`
   vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+  vim.keymap.set('n', '<C-o>', function()
+    local jump_info = vim.fn.getjumplist()
+    local target = jump_info[2] > 0 and jump_info[1][jump_info[2]] or nil
+    local target_buf = target and target.bufnr
+    local target_is_empty_directory = false
+
+    if target_buf and vim.api.nvim_buf_is_valid(target_buf) then
+      local name = vim.api.nvim_buf_get_name(target_buf)
+      local lines = vim.api.nvim_buf_get_lines(target_buf, 0, -1, false)
+      local is_empty = #lines == 0 or (#lines == 1 and lines[1] == '')
+      target_is_empty_directory = vim.bo[target_buf].buftype == ''
+        and is_empty
+        and (name == '' or vim.fn.isdirectory(name) == 1)
+    end
+
+    if vim.b.netrw_curdir and target_is_empty_directory then
+      vim.cmd.Rex()
+    else
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-o>', true, false, true), 'nx', false)
+    end
+  end, { desc = 'Return to netrw or jump back' })
+
   -- Diagnostic Config & Keymaps
   --  See `:help vim.diagnostic.Opts`
   vim.diagnostic.config {

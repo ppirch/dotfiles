@@ -44,7 +44,7 @@ do
   -- Keep edits recoverable through persistent undo, without swap or backup files.
   vim.o.swapfile = false
   vim.o.backup = false
-  vim.o.undodir = vim.fn.expand('~/.vim/undodir')
+  vim.o.undodir = vim.fn.expand '~/.vim/undodir'
   vim.fn.mkdir(vim.o.undodir, 'p')
   vim.o.undofile = true
 
@@ -66,12 +66,12 @@ do
       vim.g.clipboard = {
         name = 'OSC 52',
         copy = {
-          ['+'] = osc52.copy('+'),
-          ['*'] = osc52.copy('*'),
+          ['+'] = osc52.copy '+',
+          ['*'] = osc52.copy '*',
         },
         paste = {
-          ['+'] = osc52.paste('+'),
-          ['*'] = osc52.paste('*'),
+          ['+'] = osc52.paste '+',
+          ['*'] = osc52.paste '*',
         },
       }
     end

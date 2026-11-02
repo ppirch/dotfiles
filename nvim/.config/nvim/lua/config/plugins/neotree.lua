@@ -1,4 +1,4 @@
-local gh = require('config.plugins.manager')
+local gh = require 'config.plugins.manager'
 
 -- Neo-tree dependencies. plenary.nvim is already installed for Telescope.
 vim.pack.add {

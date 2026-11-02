@@ -1,4 +1,4 @@
-local gh = require('config.plugins.manager')
+local gh = require 'config.plugins.manager'
 
 -- Neogit provides an interactive Git interface; Diffview handles repository
 -- diffs, file history, and merge conflict views.

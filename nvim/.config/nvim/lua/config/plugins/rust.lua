@@ -1,4 +1,4 @@
-local gh = require('config.plugins.manager')
+local gh = require 'config.plugins.manager'
 
 -- ============================================================
 -- SECTION: RUST (rustaceanvim)

@@ -20,9 +20,7 @@ do
       local name = vim.api.nvim_buf_get_name(target_buf)
       local lines = vim.api.nvim_buf_get_lines(target_buf, 0, -1, false)
       local is_empty = #lines == 0 or (#lines == 1 and lines[1] == '')
-      target_is_empty_directory = vim.bo[target_buf].buftype == ''
-        and is_empty
-        and (name == '' or vim.fn.isdirectory(name) == 1)
+      target_is_empty_directory = vim.bo[target_buf].buftype == '' and is_empty and (name == '' or vim.fn.isdirectory(name) == 1)
     end
 
     if vim.b.netrw_curdir and target_is_empty_directory then
